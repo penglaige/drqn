@@ -223,7 +223,7 @@ class DRQNAgent(object):
                 # get the Q values for current observations (Q(s,a, theta_i))
                 self.Q.hidden = self.Q.init_hidden(self.batch_size)
                 self.Q_target.hidden = self.Q_target.init_hidden(self.batch_size)
-                
+
                 q_values = self.Q(obs_t)
                 q_s_a = q_values.gather(1, act_t.unsqueeze(1))
                 q_s_a = q_s_a.squeeze()
@@ -366,15 +366,11 @@ class DRQNAgent(object):
                 average_score = episode_rewards
                 total_score = episode_scores
                 total_apple = self.env.total_apple
-                total_wool = self.env.total_wool
-                total_stone = self.env.total_stone
                 exploration = self.exploration.value(t)
 
                 data = {"average_score":average_score,
                         "total_score":total_score,
                         "total_apple":total_apple,
-                        "total_wool":total_wool,
-                        "total_stone":total_stone,
                         "exploration":exploration}
 
                 if not os.path.exists("perform_records"):

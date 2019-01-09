@@ -63,7 +63,6 @@ apple_missionXML='''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
                     <DrawBlock type="fence_gate" x="41" y="5" z="42" face="WEST"/>
                     <DrawBlock type="fence_gate" x="41" y="5" z="41" face="WEST"/>
 
-                    <DrawItem x="46" y="5" z="47" type="apple"/>
 
                   </DrawingDecorator>
                   <ServerQuitFromTimeUp timeLimitMs="300000"/>

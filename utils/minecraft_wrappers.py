@@ -29,16 +29,18 @@ class ENV():
         self.cumulative_rewards = 0.0
         self.steps = 0
         #self.cumulative_rewards_from_agent = 0.0
-        self.episode_start_time = None
         self.episode_rewards = []
         self.episode_steps_average_rewards = []
         self.max_episode = MAX_EPISODE
         self.recordingsDirectory=recordingsDirectory
         self.MAX_EPISODE = MAX_EPISODE
+        self.MAX_STEP = 100
+        self.MAX_APPLE = 5
         self.width = None
         self.height = None
         self.channels = None
         self.apple_num = 0
+        self.total_apple = []
         #-------random--------
         #self.apple_space = self.get_random_space(0)
         #self.agent_space = self.get_random_space(1)
@@ -48,31 +50,23 @@ class ENV():
         #self.my_mission.drawItem( 48,5,48,"apple")
         #self.my_mission.startAtWithPitchAndYaw( 43.5,5,43.5,30,agent_yaw)
 
-    def get_random_space(self,agent):
-        space = []
-        if agent:
-            for i in [42.5,43.5,44.5,45.5,46.5,47.5,48.5]:
-                for j in [42.5,43.5,44.5,45.5,46.5,47.5,48.5]:
-                    space.append((i,j))
-            return space
+    def get_random_position(self, object):
+        if object == "agent":
+            # agent x,z~[42,49], y =5, yaw = [0,360)
+            x = random.random() * (49 - 42) + 42
+            y = 5
+            z = random.random() * (49 - 42) + 42
+            yaw = random.randint(0,359)
+            return x,y,z,yaw
+        elif object == "items":
+            # item x,z~(42,49) y = 5
+            x = random.randint(42,49)
+            y = 5
+            z = random.randint(42,49)
+            return x,y,z
         else:
-            for i in range(42,50):
-                for j in range(42,50):
-                    space.append((i,j))
-            return space
+            return "Error!"
 
-    def get_random_position(self):
-        # -------- agent and target position setting -------
-        apple_x,apple_z = random.choice(self.apple_space)
-        agent_x,agent_z = random.choice(self.agent_space)
-        agent_yaw = random.choice(range(0,360))
-        #------random----
-        #self.logger.info("Apple pisiton: %d, %d",apple_x,apple_z)
-        #self.logger.info("Agent pisiton: %f, %f",agent_x,agent_z)
-        #------fix------
-        print("Apple pisiton: 48, 48")
-        print("Agent pisiton: 43.5, 43.5")
-        return apple_x,apple_z,agent_x,agent_z,agent_yaw
         # --------------------------------------------------
 
     def canset(self):
@@ -87,11 +81,15 @@ class ENV():
         if self.recordingsDirectory:
             self.my_mission_record.setDestination(self.recordingsDirectory + "//" + "Mission_" + str(len(self.episode_rewards) + 1) + ".tgz")
 
-        agent_yaw = random.choice(range(0,360))
+        # get random agent position
+        agent_x,agent_y,agent_z,agent_yaw = self.get_random_position("agent")
         mission = self.my_mission
 
-        #mission.drawItem( 48,5,48,"apple")
-        mission.startAtWithPitchAndYaw( 44,5,43,30,0)
+        mission.startAtWithPitchAndYaw(agent_x,agent_y,agent_z,30,agent_yaw)
+        for i in range(self.MAX_APPLE):
+            item_x,item_y,item_z = self.get_random_position("items")
+            mission.drawItem(item_x,item_y,item_z,"apple")
+
         mission.forceWorldReset()
 
         time.sleep(0.5)
@@ -157,10 +155,12 @@ class ENV():
         done = self.done(world_state)
 
         if done:
+            print("collected apples: %f" % self.apple_num)
             print("cumulative_rewards: %f" % self.cumulative_rewards)
             self.episode_rewards.append(self.cumulative_rewards)
             print("average_rewards: %f" % (self.cumulative_rewards / self.steps))
             self.episode_steps_average_rewards.append(self.cumulative_rewards / self.steps)
+            self.total_apple.append(self.apple_num)
             self.cumulative_rewards = 0.0
             self.apple_num = 0
             self.steps = 0
@@ -174,7 +174,7 @@ class ENV():
         done_from_time = not world_state.is_mission_running
         done_from_task = False
 
-        if self.apple_num > 0 or self.steps >= 300:
+        if self.apple_num >= self.MAX_APPLE or self.steps >= self.MAX_STEP:
             done_from_task = True
             if world_state.is_mission_running:
                 self.agent_host.sendCommand(" move 0")
@@ -192,23 +192,17 @@ class ENV():
         reward_from_obs = 0
         reward_from_sight = 0
 
-        if len(world_state.observations) < 1:
-            reward_from_obs = 0
-            reward_from_sight = 0
-        else:
+        if len(world_state.observations) > 0:
             msg = world_state.observations[-1].text
             information = json.loads(msg)
-            self.apple_num = information.get(u'InventorySlot_0_size', 0)
+            new_apple_num = information.get(u'InventorySlot_0_size', 0)
             LineOfSight = information.get(u'LineOfSight', 0)
-            if LineOfSight:
-                if LineOfSight["type"] == "apple" and LineOfSight["distance"] <= 1.3:
-                    print("See apple!")
-                    reward_from_sight = 50
-            if self.apple_num > 0:
-                print("Get apple!")
-                reward_from_obs = 10 + reward_from_sight
-            else:
-                reward_from_obs = 0 + reward_from_sight
+            reward_from_obs = 10 * (new_apple_num - self.apple_num)
+            self.apple_num = new_apple_num
+            #if LineOfSight:
+            #    if LineOfSight["type"] == "apple" and LineOfSight["distance"] <= 1.3:
+            #        print("See apple!")
+            #        reward_from_sight = 50
 
         if len(world_state.rewards) < 1:
             reward_from_agent = 0
@@ -218,7 +212,7 @@ class ENV():
             #reward_from_agent = max(reward_from_agent,100.0 * self.apple_num - self.cumulative_rewards)
             #print("reward_from_agent: ",reward_from_agent)
 
-        return reward_from_obs, reward_from_agent
+        return max(reward_from_agent, reward_from_obs)
 
 
     def step(self, action):
@@ -245,7 +239,9 @@ class ENV():
         return new_obs, reward, done
 
     def get_episode_rewards(self):
+        # total rewards
         return self.episode_rewards
 
     def get_average_rewards_per_episode(self):
+        # average rewards
         return self.episode_steps_average_rewards
