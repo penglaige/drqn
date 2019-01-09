@@ -4,7 +4,7 @@ import numpy as np
 
 class Qnetwork(nn.Module):
     def __init__(self, in_channels, num_actions, hidden_dim, trace):
-        super(Dnetwork, self).__init__()
+        super(Qnetwork, self).__init__()
         self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=32, kernel_size=8, stride=4)
         self.conv2 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=4, stride=2)
         self.conv3 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1)
@@ -16,7 +16,7 @@ class Qnetwork(nn.Module):
         self.lstm = nn.LSTM(self.input_dim, hidden_dim)
 
         self.hidden2qvalue = nn.Linear(hidden_dim, num_actions)
-        self.hidden = self.init_hidden()
+        self.hidden = self.init_hidden(1)
 
         self.relu = nn.ReLU()
 

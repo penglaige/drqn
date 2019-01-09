@@ -1,3 +1,5 @@
 ./temp_results
 ./test_files
-
+./logs
+./models
+./records

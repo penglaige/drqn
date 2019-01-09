@@ -137,7 +137,7 @@ if dueling_dqn:
 else:
     agent = DRQNAgent(
                 env=env,
-                q_func=DQN,
+                q_func=Qnetwork,
                 optimizer_spec=optimizer,
                 num_actions=num_actions,
                 exploration=EXPLORATION_SCHEDULE,
