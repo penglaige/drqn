@@ -106,7 +106,7 @@ class DRQNAgent(object):
         self.img_w = img_w
         self.img_c = img_c
         self.input_shape = (self.img_h, self.img_w, self.frame_history_len * self.img_c)
-        self.in_channels = self.input_shape[2]
+        self.in_channels = 1
 
         # define Q target and Q
         self.Q = self.q_func(self.in_channels, self.num_actions, self.hidden_dim, self.frame_history_len).type(dtype)
@@ -166,7 +166,7 @@ class DRQNAgent(object):
                 threshold = self.exploration.value(t)
                 if sample > threshold:
                     obs = []
-                    for i in self.frame_history_len:
+                    for i in range(self.frame_history_len):
                         temp_frame = np.expand_dims(observations[i], axis=0) # 1, h, w
                         temp_frame = np.expand_dims(temp_frame, axis = 0) #1, 1, h, w
                         obs.append(temp_frame)
@@ -194,7 +194,12 @@ class DRQNAgent(object):
             if done:
                 print("----------Episode %d end!-------------" %len(self.env.episode_rewards))
                 if self.env.canset():
-                    obs = self.env.reset()
+                    while True:
+                        obs = self.env.reset()
+                        if obs.any():
+                            break
+                        else:
+                            continue
                 else:
                     print("--------Episode number max-----------")
                     break

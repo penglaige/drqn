@@ -35,7 +35,6 @@ HIDDEN_DIM = 512
 REPLAY_BUFFER_SIZE = 1000000
 FRAME_HISTORY_LEN = 10
 TARGET_UPDATE_FREQ = 10000
-#TARGET_UPDATE_FREQ = 1000
 GAMMA = 0.99
 LEARNING_FREQ = 4
 LEARNING_RATE = 0.00025
@@ -43,8 +42,6 @@ ALPHA = 0.95
 EPS = 0.01
 EXPLORATION_SCHEDULE = LinearSchedule(150000, 0.1)
 LEARNING_STARTS = 20000
-#for testing
-#LEARNING_STARTS = 1000
 
 RESIZE_MODE   = 'scale'
 RESIZE_WIDTH  = 84
@@ -81,14 +78,26 @@ logger.setLevel(logging.DEBUG)
 missionXML = apple_missionXML
 
 validate = True
-my_mission = MalmoPython.MissionSpec( missionXML, validate )
 
 agent_host.setObservationsPolicy(MalmoPython.ObservationsPolicy.LATEST_OBSERVATION_ONLY)
 agent_host.setVideoPolicy(MalmoPython.VideoPolicy.LATEST_FRAME_ONLY)
 agent_host.setRewardsPolicy(MalmoPython.RewardsPolicy.KEEP_ALL_REWARDS )
 
 if not train:
-    num_reps = 5
+    num_reps = 100
+    # Global Variables
+    BATCH_SIZE = 32
+    HIDDEN_DIM = 512
+    REPLAY_BUFFER_SIZE = 1000000
+    FRAME_HISTORY_LEN = 10
+    TARGET_UPDATE_FREQ = 1000
+    GAMMA = 0.99
+    LEARNING_FREQ = 4
+    LEARNING_RATE = 0.00025
+    ALPHA = 0.95
+    EPS = 0.01
+    EXPLORATION_SCHEDULE = LinearSchedule(150000, 0.1)
+    LEARNING_STARTS = 500
 else:
     num_reps = 1001
 
@@ -102,7 +111,7 @@ if recordingsDirectory:
     if agent_host.receivedArgument("record_video"):
         my_mission_record.recordMP4(24,2000000)
 
-env = ENV(agent_host, my_mission, my_mission_record, logger, recordingsDirectory, MAX_EPISODE=num_reps)
+env = ENV(agent_host, missionXML, validate, my_mission_record, logger, recordingsDirectory, MAX_EPISODE=num_reps)
 
 # ------------Command Parser-------------------------
 if (gpu != None):

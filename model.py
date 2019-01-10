@@ -25,6 +25,7 @@ class Qnetwork(nn.Module):
                 torch.zeros(1, batch_size, self.hidden_dim))
 
     def forward(self, x):
+        print("x size:",x.size())
         # x-size: (10, batch, 1, h, w)
         batch_size = x[0].size()[0]
         trace_list = []
@@ -32,7 +33,7 @@ class Qnetwork(nn.Module):
             frame = x[i]
             h = self.relu(self.conv1(frame))
             h = self.relu(self.conv2(h))
-            h = self.relu(self.conv2(h))
+            h = self.relu(self.conv3(h))
             h = h.view(h.size(0), -1)
             trace_list.append(h)
         # input size: (seq_len = 10, batch, input_size)

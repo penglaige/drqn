@@ -61,17 +61,22 @@ class ReplayBuffer():
     def _encode_sample(self,idxes):
         #idxes are random numbers indicate the sampling index
         obs_batch = []
-        for i in self.frame_history_len:
-            obs_i = np.concatenate([np.expand_dims(self._encode_observation(idx)[i], axis=0) for idx in idxes], 0)
+        for i in range(self.frame_history_len):
+            obs_i = np.array([np.expand_dims(self._encode_observation(idx)[i], axis=0) for idx in idxes])
             obs_batch.append(obs_i)
         # len(obs_batch) = 10, [array(batch, 1, 84, 84), ....]
         # obs_batch: 10, batch, 1, 84, 84
-        obs_batch      = np.concatenate(obs_batch, 0)
+        next_obs_batch = []
+        for i in range(self.frame_history_len):
+            next_obs_i = np.array([np.expand_dims(self._encode_observation(idx + 1)[i], axis=0) for idx in idxes])
+            next_obs_batch.append(next_obs_i)
+
+        obs_batch      = np.array(obs_batch)
         act_batch      = self.action[idxes]
         rew_batch      = self.reward[idxes]
-        next_obs_batch = np.concatenate([self._encode_observation(idx + 1)[None] for idx in idxes], 0)
+        next_obs_batch = np.array(next_obs_batch)
         done_mask      = np.array([1.0 if self.done[idx] else 0.0 for idx in idxes], dtype=np.float32)
-
+        #print("obs_batch size:",np.shape(obs_batch))
         return obs_batch, act_batch, rew_batch, next_obs_batch, done_mask
 
     def sample(self, batch_size):

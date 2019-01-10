@@ -21,9 +21,10 @@ import json
 #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class ENV():
-    def __init__(self, agent_host, my_mission, my_mission_record, logger,recordingsDirectory, MAX_EPISODE):
+    def __init__(self, agent_host, missionXML, validate, my_mission_record, logger,recordingsDirectory, MAX_EPISODE):
         self.agent_host = agent_host
-        self.my_mission = my_mission
+        self.missionXML = missionXML
+        self.validate = validate
         self.my_mission_record = my_mission_record
         self.logger = logger
         self.cumulative_rewards = 0.0
@@ -83,9 +84,10 @@ class ENV():
 
         # get random agent position
         agent_x,agent_y,agent_z,agent_yaw = self.get_random_position("agent")
-        mission = self.my_mission
+        mission = MalmoPython.MissionSpec(self.missionXML, self.validate)
 
         mission.startAtWithPitchAndYaw(agent_x,agent_y,agent_z,30,agent_yaw)
+        print("agent position: x:{},y:{},z:{},yaw:{}".format(agent_x,agent_y,agent_z,agent_yaw))
         for i in range(self.MAX_APPLE):
             item_x,item_y,item_z = self.get_random_position("items")
             mission.drawItem(item_x,item_y,item_z,"apple")
@@ -144,17 +146,17 @@ class ENV():
             frame = np.zeros((self.height,self.width,self.channels))
 
         frame = np.array(frame).reshape(self.height,self.width,self.channels)
+        if not ALL:
+            return frame
 
-        reward_from_obs, reward_from_agent = self.get_reward(world_state)
-        reward = reward_from_obs + reward_from_agent
-        #self.cumulative_rewards += reward_from_obs
-        self.cumulative_rewards += reward_from_agent
-        #self.cumulative_rewards_from_agent += reward_from_agent
-        #print("new_cumulative_rewards: %f" % self.cumulative_rewards)
+        reward = self.get_reward(world_state)
+        self.cumulative_rewards += reward
 
         done = self.done(world_state)
 
         if done:
+            if self.steps == 0:
+                return False
             print("collected apples: %f" % self.apple_num)
             print("cumulative_rewards: %f" % self.cumulative_rewards)
             self.episode_rewards.append(self.cumulative_rewards)
@@ -165,10 +167,7 @@ class ENV():
             self.apple_num = 0
             self.steps = 0
 
-        if not ALL:
-            return frame
-        else:
-            return frame, reward, done
+        return frame, reward, done
 
     def done(self,world_state):
         done_from_time = not world_state.is_mission_running
@@ -179,11 +178,8 @@ class ENV():
             if world_state.is_mission_running:
                 self.agent_host.sendCommand(" move 0")
                 for i in range(1):
-                    #self.agent_host.sendCommand("quit")
                     print("try to quit mission...")
                     time.sleep(0.04)
-            #if self.apple_num > 0:
-                #self.cumulative_rewards = 100
         return done_from_time or done_from_task
 
 
@@ -198,7 +194,6 @@ class ENV():
             new_apple_num = information.get(u'InventorySlot_0_size', 0)
             LineOfSight = information.get(u'LineOfSight', 0)
             reward_from_obs = 10 * (new_apple_num - self.apple_num)
-            self.apple_num = new_apple_num
             #if LineOfSight:
             #    if LineOfSight["type"] == "apple" and LineOfSight["distance"] <= 1.3:
             #        print("See apple!")
@@ -208,11 +203,13 @@ class ENV():
             reward_from_agent = 0
         else:
             reward_from_agent = world_state.rewards[-1].getValue()
-            #print("apple_num: ",self.apple_num)
-            #reward_from_agent = max(reward_from_agent,100.0 * self.apple_num - self.cumulative_rewards)
-            #print("reward_from_agent: ",reward_from_agent)
-
-        return max(reward_from_agent, reward_from_obs)
+        if reward_from_agent != reward_from_obs:
+            reward = max(reward_from_agent, reward_from_obs)
+            self.apple_num += reward / 10
+            return reward
+        else:
+            self.apple_num = new_apple_num
+            return reward_from_agent
 
 
     def step(self, action):
