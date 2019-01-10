@@ -1,6 +1,8 @@
-./temp_results
-./test_files
-./logs
-./models
-./records
-./__pycache__
+temp_results/
+test_files/
+logs/
+models/
+records/
+__pycache__/
+perform_records/
+mission_records/
