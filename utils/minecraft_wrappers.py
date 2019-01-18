@@ -208,7 +208,7 @@ class ENV():
             self.apple_num += reward / 10
             return reward
         else:
-            self.apple_num = new_apple_num
+            self.apple_num += reward_from_agent / 10
             return reward_from_agent
 
 

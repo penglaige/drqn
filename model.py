@@ -25,7 +25,7 @@ class Qnetwork(nn.Module):
                 torch.zeros(1, batch_size, self.hidden_dim))
 
     def forward(self, x):
-        print("x size:",x.size())
+        #print("x size:",x.size())
         # x-size: (10, batch, 1, h, w)
         batch_size = x[0].size()[0]
         trace_list = []
