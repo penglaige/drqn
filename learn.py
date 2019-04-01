@@ -242,6 +242,7 @@ class DRQNAgent(object):
                     # get the Q values for best actions in obs_tp1
                     # based off the current Q network
                     # max(Q(s', a', theta_i)) wrt a'
+                    self.Q.hidden = self.Q.init_hidden(self.batch_size)
                     q_tp1_values = self.Q(obs_tp1).detach()
                     _, a_prime = q_tp1_values.max(1)
 

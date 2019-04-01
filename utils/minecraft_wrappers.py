@@ -35,8 +35,8 @@ class ENV():
         self.max_episode = MAX_EPISODE
         self.recordingsDirectory=recordingsDirectory
         self.MAX_EPISODE = MAX_EPISODE
-        self.MAX_STEP = 100
-        self.MAX_APPLE = 5
+        self.MAX_STEP = 25
+        self.MAX_APPLE = 2
         self.width = None
         self.height = None
         self.channels = None
@@ -54,10 +54,10 @@ class ENV():
     def get_random_position(self, object):
         if object == "agent":
             # agent x,z~[42,49], y =5, yaw = [0,360)
-            x = random.random() * (49 - 42) + 42
+            x = random.randint(42,49)
             y = 5
-            z = random.random() * (49 - 42) + 42
-            yaw = random.randint(0,359)
+            z = random.randint(42,49)
+            yaw = random.randint(0,3) * 90
             return x,y,z,yaw
         elif object == "items":
             # item x,z~(42,49) y = 5
@@ -217,20 +217,14 @@ class ENV():
         if action == 0:
             # turn left
             self.agent_host.sendCommand("turn -1")
-            time.sleep(0.2)
-            self.agent_host.sendCommand("turn 0")
 
         elif action == 1:
+            # turn right
             self.agent_host.sendCommand("turn 1")
-            time.sleep(0.2)
-            self.agent_host.sendCommand("turn 0")
 
         elif action == 2:
             # go straight
             self.agent_host.sendCommand("move 1")
-            time.sleep(0.2)
-            self.agent_host.sendCommand("move 0")
-
 
         new_obs, reward, done = self.get_frame(ALL=True)
         return new_obs, reward, done

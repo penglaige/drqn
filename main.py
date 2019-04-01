@@ -40,7 +40,7 @@ LEARNING_FREQ = 4
 LEARNING_RATE = 0.00025
 ALPHA = 0.95
 EPS = 0.01
-EXPLORATION_SCHEDULE = LinearSchedule(150000, 0.1)
+EXPLORATION_SCHEDULE = LinearSchedule(1000000, 0.1)
 LEARNING_STARTS = 20000
 
 RESIZE_MODE   = 'scale'
@@ -90,16 +90,16 @@ if not train:
     HIDDEN_DIM = 512
     REPLAY_BUFFER_SIZE = 1000000
     FRAME_HISTORY_LEN = 10
-    TARGET_UPDATE_FREQ = 1000
+    TARGET_UPDATE_FREQ = 500
     GAMMA = 0.99
     LEARNING_FREQ = 4
     LEARNING_RATE = 0.00025
     ALPHA = 0.95
     EPS = 0.01
-    EXPLORATION_SCHEDULE = LinearSchedule(150000, 0.1)
+    EXPLORATION_SCHEDULE = LinearSchedule(2000, 0.1)
     LEARNING_STARTS = 500
 else:
-    num_reps = 1001
+    num_reps = 50000
 
 print("num_reps:",num_reps)
 
