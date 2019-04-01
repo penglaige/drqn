@@ -170,7 +170,7 @@ class DRQNAgent(object):
                         temp_frame = np.expand_dims(observations[i], axis=0) # 1, h, w
                         temp_frame = np.expand_dims(temp_frame, axis = 0) #1, 1, h, w
                         obs.append(temp_frame)
-                    obs = np.concatenate(obs, 0) # 10, 1, 1, h, w
+                    obs = np.array(obs) # 10, 1, 1, h, w
                     obs = torch.from_numpy(obs).type(dtype) / 255.0
 
                     with torch.no_grad():
