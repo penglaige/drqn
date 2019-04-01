@@ -7,4 +7,4 @@ __pycache__/
 perform_records/
 mission_records/
 utils/__pycache__/
-
+.DS_Store
