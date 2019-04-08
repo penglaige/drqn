@@ -47,6 +47,8 @@ RESIZE_MODE   = 'scale'
 RESIZE_WIDTH  = 84
 RESIZE_HEIGHT = 84
 
+CUDA_VISIBLE_DEVICES = 0
+
 num_actions = 3
 
 def stopping_criterion(agent_host, t):
@@ -116,9 +118,10 @@ env = ENV(agent_host, missionXML, validate, my_mission_record, logger, recording
 # ------------Command Parser-------------------------
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
+print("current available gpu numbers: %d" %torch.cuda.device_count())
 if (gpu != None):
     if torch.cuda.is_available():
-        torch.cuda.set_device(device)
+        torch.cuda.set_device(CUDA_VISIBLE_DEVICES)
         print("CUDA Device: %d" %torch.cuda.current_device())
 
 seed = 0
