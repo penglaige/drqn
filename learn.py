@@ -26,6 +26,7 @@ OptimizerSpec = namedtuple("OptimizerSpec", ["constructor", "kwargs"])
 USE_CUDA = torch.cuda.is_available()
 dtype = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
 dlongtype = torch.cuda.LongTensor if torch.cuda.is_available() else torch.LongTensor
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 # dqn_learner
 class DRQNAgent(object):

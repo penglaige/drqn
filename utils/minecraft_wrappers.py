@@ -35,7 +35,7 @@ class ENV():
         self.max_episode = MAX_EPISODE
         self.recordingsDirectory=recordingsDirectory
         self.MAX_EPISODE = MAX_EPISODE
-        self.MAX_STEP = 25
+        self.MAX_STEP = 100
         self.MAX_APPLE = 5
         self.width = None
         self.height = None

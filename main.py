@@ -40,8 +40,8 @@ LEARNING_FREQ = 4
 LEARNING_RATE = 0.00025
 ALPHA = 0.95
 EPS = 0.01
-EXPLORATION_SCHEDULE = LinearSchedule(100000, 0.1)
-LEARNING_STARTS = 50000
+EXPLORATION_SCHEDULE = LinearSchedule(80000, 0.1)
+LEARNING_STARTS = 15000
 
 RESIZE_MODE   = 'scale'
 RESIZE_WIDTH  = 84
@@ -99,7 +99,7 @@ if not train:
     EXPLORATION_SCHEDULE = LinearSchedule(2000, 0.1)
     LEARNING_STARTS = 500
 else:
-    num_reps = 50000
+    num_reps = 10000
 
 print("num_reps:",num_reps)
 
