@@ -115,6 +115,7 @@ env = ENV(agent_host, missionXML, validate, my_mission_record, logger, recording
 
 # ------------Command Parser-------------------------
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(device)
 if (gpu != None):
     if torch.cuda.is_available():
         torch.cuda.set_device(device)
