@@ -114,9 +114,10 @@ if recordingsDirectory:
 env = ENV(agent_host, missionXML, validate, my_mission_record, logger, recordingsDirectory, MAX_EPISODE=num_reps)
 
 # ------------Command Parser-------------------------
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 if (gpu != None):
     if torch.cuda.is_available():
-        torch.cuda.set_device(args.gpu)
+        torch.cuda.set_device(device)
         print("CUDA Device: %d" %torch.cuda.current_device())
 
 seed = 0
