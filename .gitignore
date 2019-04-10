@@ -1,3 +1,7 @@
+MalmoPython.so
+malmoutils.py
+depth_map_runner.py
+run_mission.py
 temp_results/
 test_files/
 logs/
