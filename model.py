@@ -21,8 +21,8 @@ class Qnetwork(nn.Module):
         self.relu = nn.ReLU()
 
     def init_hidden(self, batch_size):
-        return (torch.zeros(1, batch_size, self.hidden_dim),
-                torch.zeros(1, batch_size, self.hidden_dim)).cuda()
+        return (torch.zeros(1, batch_size, self.hidden_dim).cuda(),
+                torch.zeros(1, batch_size, self.hidden_dim).cuda())
 
     def forward(self, x):
         #print("x size:",x.size())
