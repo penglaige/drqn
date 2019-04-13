@@ -54,16 +54,16 @@ class ENV():
     def get_random_position(self, object):
         if object == "agent":
             # agent x,z~[42,49], y =5, yaw = [0,360)
-            x = random.randint(42,49)
+            x = random.randint(42,48)+0.5
             y = 5
-            z = random.randint(42,49)
+            z = random.randint(42,48)+0.5
             yaw = random.randint(0,3) * 90
             return x,y,z,yaw
         elif object == "items":
             # item x,z~(42,49) y = 5
-            x = random.randint(42,49)
+            x = random.randint(42,48)+0.5
             y = 5
-            z = random.randint(42,49)
+            z = random.randint(42,48)+0.5
             return x,y,z
         else:
             return "Error!"
