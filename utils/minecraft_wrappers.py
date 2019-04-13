@@ -61,9 +61,9 @@ class ENV():
             return x,y,z,yaw
         elif object == "items":
             # item x,z~(42,49) y = 5
-            x = random.randint(42,48)+0.5
+            x = random.randint(42,48)
             y = 5
-            z = random.randint(42,48)+0.5
+            z = random.randint(42,48)
             return x,y,z
         else:
             return "Error!"
