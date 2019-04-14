@@ -101,7 +101,7 @@ if not train:
     EXPLORATION_SCHEDULE = LinearSchedule(2000, 0.1)
     LEARNING_STARTS = 500
 else:
-    num_reps = 4000
+    num_reps = 3000
 
 print("num_reps:",num_reps)
 
