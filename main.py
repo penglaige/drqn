@@ -129,6 +129,7 @@ if (gpu != None):
 seed = 0
 #--------------------------- Agent setting ------------------------------------------------------------
 if dueling_dqn:
+    print("use dueling dqn")
     agent = DRQNAgent(
                 env=env,
                 q_func=Dueling_DQN,
@@ -151,6 +152,7 @@ if dueling_dqn:
                 dueling_dqn=dueling_dqn
     )
 elif dqn:
+    print("use dqn")
     agent = DQNAgent(
                 env=env,
                 q_func=DQN,
@@ -172,6 +174,7 @@ elif dqn:
                 dueling_dqn=dueling_dqn
     )
 elif random_play:
+    print("use random player")
     agent = Ramdom(
                 env=env,
                 q_func=Qnetwork,
@@ -194,6 +197,7 @@ elif random_play:
                 dueling_dqn=dueling_dqn
     )
 else:
+    print("use drqn")
     agent = DRQNAgent(
                 env=env,
                 q_func=Qnetwork,
