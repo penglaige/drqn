@@ -11,7 +11,7 @@ import itertools
 import numpy as np
 import random
 from collections import namedtuple
-from utils.replay_buffer import *
+from utils.dqn_replay_buffer import *
 from utils.schedules import *
 from utils.minecraft_wrappers import ENV
 from logger import Logger
