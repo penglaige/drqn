@@ -114,7 +114,7 @@ class TESTAgent(object):
 
         # open model file:
         try:
-            self.model = torch.load(modelFile，map_location='cpu')
+            self.model = torch.load(modelFile, map_location='cpu')
         except:
             print("Open model file Error!")
 
