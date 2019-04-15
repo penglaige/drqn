@@ -350,15 +350,11 @@ class DQNAgent(object):
                 average_score = episode_rewards
                 total_score = episode_scores
                 total_apple = self.env.total_apple
-                total_wool = self.env.total_wool
-                total_stone = self.env.total_stone
                 exploration = self.exploration.value(t)
 
                 data = {"average_score":average_score,
                         "total_score":total_score,
                         "total_apple":total_apple,
-                        "total_wool":total_wool,
-                        "total_stone":total_stone,
                         "exploration":exploration}
 
                 if not os.path.exists("perform_records"):

@@ -198,7 +198,7 @@ class ENV():
             #    if LineOfSight["type"] == "apple" and LineOfSight["distance"] <= 1.3:
             #        print("See apple!")
             #        reward_from_sight = 50
-
+        discount = (self.steps+10)/10
         if len(world_state.rewards) < 1:
             reward_from_agent = 0
         else:
@@ -206,10 +206,10 @@ class ENV():
         if reward_from_agent != reward_from_obs:
             reward = max(reward_from_agent, reward_from_obs)
             self.apple_num += reward / 10
-            return reward
+            return reward/discount
         else:
             self.apple_num += reward_from_agent / 10
-            return reward_from_agent
+            return reward_from_agent/discount
 
 
     def step(self, action):
