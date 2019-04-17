@@ -49,9 +49,13 @@ def parse_command_line(agent_host, argv=None):
        argv = sys.argv
     # Add standard options required by test suite:
     agent_host.addOptionalStringArgument( "recording_dir,r", "Path to location for saving mission recordings", "./records" )
-    agent_host.addOptionalFlag( "train", "1:train 0:test")
+    agent_host.addOptionalStringArgument( "test_file", "Path of the model to test", "" )
+    agent_host.addOptionalFlag( "test_model", "1:test the model")
+    agent_host.addOptionalFlag( "train", "1:train 0:small_test")
     agent_host.addOptionalFlag( "record_video,v", "Record video stream" )
     agent_host.addOptionalFlag( "gpu", "Whether use a gpu" )
+    agent_host.addOptionalFlag( "dqn", "Whether use a dqn" )
+    agent_host.addOptionalFlag( "random", "Whether use a random player" )
     agent_host.addOptionalFlag( "double_dqn", "Whether use a double dqn")
     agent_host.addOptionalFlag( "dueling_dqn"," Whether use a dueling dqn")
 
@@ -106,10 +110,15 @@ def get_recordings_directory(agent_host):
                 raise
     return recordingsDirectory
 
+
 def get_options(agent_host):
     # Get other optional arguments
     gpu = agent_host.receivedArgument("gpu")
     double_dqn = agent_host.receivedArgument("double_dqn")
     dueling_dqn = agent_host.receivedArgument("dueling_dqn")
     train = agent_host.receivedArgument("train")
-    return train, gpu, double_dqn, dueling_dqn
+    dqn = agent_host.receivedArgument("dqn")
+    random_play = agent_host.receivedArgument("random")
+    test_model = agent_host.receivedArgument("test_model")
+    modelFile = agent_host.getStringArgument('test_file')
+    return train, test_model, gpu, dqn, double_dqn, dueling_dqn, random_play, modelFile

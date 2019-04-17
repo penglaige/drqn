@@ -1,5 +1,5 @@
-video_width  = 200
-video_height = 160
+video_width  = 84
+video_height = 84
 
 apple_missionXML='''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

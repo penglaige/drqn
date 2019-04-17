@@ -41,7 +41,7 @@ class DQNAgent(object):
         frame_history_len=4,
         img_h=84,
         img_w=84,
-        img_c=1,
+        img_c=3,
         target_update_freq=10000,
         double_dqn=False,
         dueling_dqn=False):

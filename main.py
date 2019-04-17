@@ -169,7 +169,7 @@ elif dqn:
                 frame_history_len=4,
                 img_h=RESIZE_HEIGHT,
                 img_w=RESIZE_WIDTH,
-                img_c=1,
+                img_c=3,
                 target_update_freq=TARGET_UPDATE_FREQ,
                 double_dqn=double_dqn,
                 dueling_dqn=dueling_dqn
