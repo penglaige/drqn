@@ -168,7 +168,7 @@ class ReplayBuffer():
         # if observation is an image...
         if len(frame.shape) > 1:
             # transfer the rgb frame to gray frame
-            gray_frame = preprocess_image(frame, self.resize_width, self.resize_height, self.resize_mode)
+            #gray_frame = preprocess_image(frame, self.resize_width, self.resize_height, self.resize_mode)
             #transpose image frame into c, h, w instead of h,w,c
             frame = gray_frame.transpose(2, 0, 1)
 

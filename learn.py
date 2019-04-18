@@ -43,7 +43,7 @@ class DRQNAgent(object):
         frame_history_len=10,
         img_h=84,
         img_w=84,
-        img_c=1,
+        img_c=3,
         target_update_freq=10000,
         double_dqn=False,
         dueling_dqn=False):
@@ -106,7 +106,7 @@ class DRQNAgent(object):
         self.img_w = img_w
         self.img_c = img_c
         self.input_shape = (self.img_h, self.img_w, self.frame_history_len * self.img_c)
-        self.in_channels = 1
+        self.in_channels = self.img_c * 1
 
         # define Q target and Q
         self.Q = self.q_func(self.in_channels, self.num_actions, self.hidden_dim, self.frame_history_len).type(dtype)

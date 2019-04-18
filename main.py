@@ -35,7 +35,7 @@ import malmoutils
 # Global Variables
 BATCH_SIZE = 32
 HIDDEN_DIM = 512
-REPLAY_BUFFER_SIZE = 1000000
+REPLAY_BUFFER_SIZE = 200000
 FRAME_HISTORY_LEN = 10
 TARGET_UPDATE_FREQ = 2000
 GAMMA = 0.99
@@ -43,7 +43,7 @@ LEARNING_FREQ = 4
 LEARNING_RATE = 0.00025
 ALPHA = 0.95
 EPS = 0.01
-EXPLORATION_SCHEDULE = LinearSchedule(120000, 0.1)
+EXPLORATION_SCHEDULE = LinearSchedule(200000, 0.1)
 LEARNING_STARTS = 30000
 
 RESIZE_MODE   = 'scale'
@@ -104,7 +104,7 @@ if not train:
     EXPLORATION_SCHEDULE = LinearSchedule(2000, 0.1)
     LEARNING_STARTS = 500
 else:
-    num_reps = 4000
+    num_reps = 5000
 
 print("num_reps:",num_reps)
 
@@ -147,7 +147,7 @@ if dueling_dqn:
                 frame_history_len=FRAME_HISTORY_LEN,
                 img_h=RESIZE_HEIGHT,
                 img_w=RESIZE_WIDTH,
-                img_c=1,
+                img_c=3,
                 target_update_freq=TARGET_UPDATE_FREQ,
                 double_dqn=double_dqn,
                 dueling_dqn=dueling_dqn
@@ -192,7 +192,7 @@ elif random_play:
                 frame_history_len=FRAME_HISTORY_LEN,
                 img_h=RESIZE_HEIGHT,
                 img_w=RESIZE_WIDTH,
-                img_c=1,
+                img_c=3,
                 target_update_freq=TARGET_UPDATE_FREQ,
                 double_dqn=double_dqn,
                 dueling_dqn=dueling_dqn
@@ -216,7 +216,7 @@ elif test_model:
                 frame_history_len=FRAME_HISTORY_LEN,
                 img_h=RESIZE_HEIGHT,
                 img_w=RESIZE_WIDTH,
-                img_c=1,
+                img_c=3,
                 target_update_freq=TARGET_UPDATE_FREQ,
                 double_dqn=double_dqn,
                 dueling_dqn=dueling_dqn
@@ -239,7 +239,7 @@ else:
                 frame_history_len=FRAME_HISTORY_LEN,
                 img_h=RESIZE_HEIGHT,
                 img_w=RESIZE_WIDTH,
-                img_c=1,
+                img_c=3,
                 target_update_freq=TARGET_UPDATE_FREQ,
                 double_dqn=double_dqn,
                 dueling_dqn=dueling_dqn
